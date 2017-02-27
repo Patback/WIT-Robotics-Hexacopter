@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 ## A lot of these commands need root, so let's check for that first:
 if ["$EUID" -ne 0] # Checking to see if the user ID is not 0. This checks for root, as root has a user ID of 0.
   then echo "This needs root permissions! Run this command as root, either by changing user to root with 'su root' or by using 'sudo'." # Inform the user
