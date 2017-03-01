@@ -23,5 +23,6 @@ mv ./sshd_config /etc/ssh/sshd_config   # Moves the sshd_config file from earlie
 
 
 
-useradd -m -p control                    # Adds a user called 'control'
-echo control:defaultpassword | chpasswd  # Changes the password of 'control' to 'defaultpassword' by piping it into chpasswd
+useradd -m -p control                   	# Adds a user called 'control'
+echo control:defaultpassword | chpasswd 	# Changes the password of 'control' to 'defaultpassword' by piping it into chpasswd
+# passwd -l pi	 							# Locks the Pi user for security reasons
