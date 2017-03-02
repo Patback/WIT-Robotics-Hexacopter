@@ -11,3 +11,4 @@ Currently WIP, all python is python3, hex_firsttime.sh is aimed at doing everyth
 - 'Scripts' 
    Contains all .sh scripts, including hex_firsttime.sh which handles all of the setup on a new install.
    
+   Written by Chris
