@@ -12,16 +12,6 @@ apt-get --assume-yes install hostapd              # Installs hostapd, allowing u
 apt-get --assume-yes install openssh-server       # Installs openssh-server, which allows us to open ssh on the pi. It may already be installed, but since we're using it, we may as well double-check.
 apt-get --assume-yes install git                  # Should already have Git, but just to make sure
 
-## We may be using airbase-ng for making an ap, not sure yet.
-## airbase-ng is a part of the aircrack-ng suite, which isn't in the raspbian repos.
-## As a result, we need to install from source using wget.
-cd /                                              # Moving to root directory
-wget http://download.aircrack-ng.org/aircrack-ng-1.2-rc4.tar.gz # Getting aircrack-ng (because we want airbase-ng)
-tar -zxvf aircrack-ng-1.2-rc4.tar.gz              # Extracting
-cd aircrack-ng-1.2-rc4                            # Navigating to the extracted file
-make                                              # Making the suite
-make install                                      # Installing the suite
-
 ## We know we have the tools we'll need, so now we can start downloading the rest.
 cd /                                                           # Changes directory to root so that it's all in one easy place. We'll clean it up later.
 git clone https://github.com/thieraufc/WIT-Robotics-Hexacopter # Clones the code from the WIT-Robotics-Hexacopter repository on my account
