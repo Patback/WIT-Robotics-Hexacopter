@@ -1,0 +1,40 @@
+// The general form PID controller, modded for usage with the rotors
+// Start by setting up values. Done at the top for ease of tuning.
+Kp = 1           // Initial Proportional gain
+Ki = 1           // Initial Integral gain
+sampleRate = 100 // Set Sample rate (how quickly this runs)
+PID:
+  :LOOP
+  // Getting all the values to be used later.
+    setpoint     := GetDesiredRPM
+    currentRPM   := GetActualRPM
+    startTime    := Get the current time
+    timeChange   := currentTime - lastTime
+
+  // Finding error values
+    error     := setpoint - currentRPM
+    errorSum  := errorSum + (error * timeChange)
+
+  // Doing the PI math
+    result = (Kp * error) + (Ki * errorSum)
+
+  // Wait a bit to let things happen
+      WAIT sampleRate ms
+
+  // Saving the time variable to be used next loop
+    lastTime := startTime
+
+  GOTO LOOP
+END PID
+
+GetDesiredRPM:
+  // RPM will be passed in, either as a variable or from a file.
+    RETURNS desiredRPM
+END GetDesiredRPM
+
+GetActualRPM:
+  // Sensor values are read from the counters, the counters get reset, return RPM.
+    counterVal :=  Get value from the counter
+    RESET counter
+    RETURNS counterVal / sampleRate
+END GetActualRPM

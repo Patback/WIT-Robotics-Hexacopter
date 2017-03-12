@@ -1,0 +1,28 @@
+// A general form PI Controller
+// Start by setting up values. Done at the top for ease of tuning.
+Kp = 1           // Initial Proportional gain
+Ki = 1           // Initial Integral gain
+sampleRate = 100 // Set Sample rate (how quickly this runs)
+PID:
+  :LOOP
+  // Getting all the values to be used later.
+    setpoint     := Get desired values
+    currentVal   := Get the actual values
+    startTime    := Get the current time
+    timeChange   := currentTime - lastTime
+
+  // Finding error values
+    error     := setpoint - currentVal
+    errorSum  := errorSum + (error * timeChange)
+
+  // Doing the PI math
+    result = (Kp * error) + (Ki * errorSum)
+
+  // Wait a moment to allow real life to catch up
+    wait sampleRate ms
+
+  // Saving the time variable to be used next loop
+    lastTime := startTime
+
+  GOTO LOOP
+END PID
