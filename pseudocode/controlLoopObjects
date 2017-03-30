@@ -1,0 +1,70 @@
+# The idea with this is to flush out the rotor control loop stuff some more.
+# We know that we will have several running at the same time, and that
+# they will need to have independent sensors and speeds. This means
+# independent values for all these things, which lends itself best to an object.
+
+public  boolean isReady = false
+private float   actualRPM
+private float   goalRPM
+private int     rotor
+private float   Kp = 1
+private float   Ki = 1
+
+# The constructor. Sets stuff up, and tries to check if the sensor is ready to go. If not, returns false. This allows for safety checking later.
+constructor(rotorNum):
+  this.rotor := rotorNum
+  setGoalRPM(0)
+  wait(100)
+  if(GetActualRPM == [some reasonable set of values]){
+    isReady := true
+  }
+END constructor()
+
+# Setting the goal RPM. This is to be used by the main code, and allows it to access 'goalRPM'
+setGoalRPM(goalIn):
+  goalRPM := goalIn
+END setGoalRPM
+
+# Getting the RPM
+getGoalRPM:
+# RPM will be passed in, either as a variable or from a file.
+RETURNS goalRPM
+END GetDesiredRPM
+
+GetActualRPM:
+# Sensor values are read from the counters, the counters get reset, return RPM.
+counterVal :=  Get value from the counter
+RESET counter
+RETURNS counterVal / timeChange
+END GetActualRPM
+
+# Doing the actual PID code
+updatePID(goalRPM, actualRPM):
+    # Getting all the values to be used later.
+      setpoint     := getGoalRPM
+      currentRPM   := GetActualRPM
+      startTime    := Get the current time
+      timeChange   := currentTime - lastTime
+
+    # Finding error values
+      error     := setpoint - currentRPM
+      errorSum  := errorSum + (error * timeChange)
+
+    # Doing the PI math
+      result = (Kp * error) + (Ki * errorSum)
+
+    # Use the result
+      updateRPM(result)
+
+    # Wait a bit to let things happen
+        WAIT sampleRate ms
+
+    # Saving the time variable to be used next loop
+      lastTime := startTime
+
+END updatePID()
+
+# updating the RPM using the pwm object that interacts with the pwm board
+updateRPM(result):
+  pwm.set_pwm(rotor, result)
+END updateRPM()
